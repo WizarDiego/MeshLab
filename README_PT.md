@@ -18,44 +18,18 @@ Com o MeshLab você pode:
 
 ---
 
-## ▶️ Como Executar o Programa
+## ▶️ Como Rodar o Programa (Sem compilar)
 
-> **O único arquivo que você precisa clicar é:**
+> [!IMPORTANT]
+> O único arquivo que você precisa clicar para abrir o MeshLab é:
 >
-> `build\src\distrib\` → **`meshlab.exe`** ← duplo clique aqui!
+> **`build\src\distrib\`** → **`meshlab.exe`** ← duplo clique aqui!
 
-Todos os outros arquivos da pasta `distrib\` são dependências carregadas **automaticamente**. Você não precisa tocar em nenhum outro arquivo.
-
----
-
-## 🔗 Fluxo de Execução
-
-```mermaid
-flowchart TD
-    A["👤 Você"] -->|"Duplo clique"| B
-
-    B["🟢 meshlab.exe\nbuild/src/distrib/"]
-
-    B -->|carrega| C["📦 meshlab-common.dll\nProcessamento de malhas"]
-    B -->|carrega| D["📦 Qt5*.dll\nInterface gráfica"]
-    B -->|carrega| E["📦 embree4.dll\nRaytracing 3D"]
-    B -->|carrega automaticamente| F["📂 plugins/\nFiltros e ferramentas"]
-    B -->|carrega automaticamente| G["📂 shaders/\nEfeitos visuais"]
-
-    C --> H["✅ MeshLab aberto\npronto para usar!"]
-    D --> H
-    E --> H
-    F --> H
-    G --> H
-
-    style B fill:#22c55e,color:#fff,stroke:#16a34a,stroke-width:3px
-    style H fill:#3b82f6,color:#fff,stroke:#2563eb
-    style A fill:#f59e0b,color:#fff,stroke:#d97706
-```
+Todos os outros arquivos da pasta `distrib\` são dependências que ficam **ao lado** do `.exe` e são carregados automaticamente. Você **não precisa tocar em nenhum outro arquivo**.
 
 ---
 
-## 📁 Estrutura de Pastas do Projeto (raiz)
+## 📁 Estrutura do Projeto (Visão Geral)
 
 ```
 MeshLab-Main\                        ← Raiz do projeto
@@ -82,90 +56,51 @@ MeshLab-Main\                        ← Raiz do projeto
 
 ---
 
-## ✅ Pasta do Executável — `build\src\distrib\`
+## ✅ Detalhes da Pasta do Executável — `build\src\distrib\`
 
-Esta é a única pasta que importa para rodar o programa. Tudo que o MeshLab precisa está aqui:
+Esta é a única pasta que importa para **rodar o programa**. Tudo que o MeshLab precisa está aqui:
 
-```
-distrib\
-│
-├── 🟢 meshlab.exe              ← ▶️ ARQUIVO PRINCIPAL — execute este!
-├──    UseCPUOpenGL.exe         ← Alternativa se der problema gráfico
-│
-├── ── Bibliotecas do Qt (Interface Gráfica) ──
-├── 📦 Qt5Core.dll              ← Núcleo do Qt
-├── 📦 Qt5Gui.dll               ← Janelas e gráficos
-├── 📦 Qt5Widgets.dll           ← Botões, menus, painéis
-├── 📦 Qt5OpenGL.dll            ← Renderização 3D via OpenGL
-├── 📦 Qt5Network.dll           ← Rede (online check)
-├── 📦 Qt5Svg.dll               ← Ícones SVG
-├── 📦 Qt5Xml.dll               ← Leitura de XML
-│
-├── ── Bibliotecas do MeshLab ──
-├── 📦 meshlab-common.dll       ← Core do MeshLab (processamento)
-├── 📦 meshlab-common-gui.dll   ← Interface do MeshLab
-│
-├── ── Bibliotecas 3D / Motores ──
-├── 📦 embree4.dll              ← Motor de raytracing (Intel Embree)
-├── 📦 external-glew.dll        ← Extensões OpenGL
-├── 📦 external-lib3ds.dll      ← Suporte ao formato 3DS
-├── 📦 lib3mf.dll               ← Suporte ao formato 3MF
-├── 📦 E57Format.dll            ← Suporte a nuvem de pontos E57
-├── 📦 tbb12.dll                ← Paralelismo multi-thread (Intel TBB)
-│
-├── ── Bibliotecas Matemáticas ──
-├── 📦 muparser.dll             ← Parser de expressões matemáticas
-├── 📦 libgmp-10.dll            ← Aritmética de precisão arbitrária
-├── 📦 libmpfr-4.dll            ← Aritmética de ponto flutuante precisa
-│
-├── ── Bibliotecas OpenGL / Diagnóstico ──
-├── 📦 IFXCore.dll              ← Suporte U3D/IFX
-├── 📦 IFXExporting.dll         ← Exportação U3D
-├── 📦 IFXScheduling.dll        ← Agendamento U3D
-├── 📦 libEGL.dll               ← Interface OpenGL ES
-├── 📦 libGLESv2.dll            ← OpenGL ES 2.0
-├── 📦 opengl32sw.dll           ← OpenGL por software (fallback)
-├── 📦 D3Dcompiler_47.dll       ← Compilador shader DirectX
-├── 📦 xerces-c_3_2.dll         ← Parser XML pesado (formatos 3D)
-│
-├── 📂 plugins\                 ← Filtros e ferramentas extras
-│   ├── 📦 filter_meshing.dll   ← Decimação, suavização
-│   ├── 📦 filter_color.dll     ← Filtros de cor/textura
-│   ├── 📦 io_base.dll          ← Importar/exportar OBJ, PLY, STL...
-│   └── 📦 ... (mais ~30 plugins)
-│
-├── 📂 shaders\                 ← Efeitos visuais (GLSL)
-│   ├── 📄 toon.frag/.vert      ← Estilo cartoon
-│   ├── 📄 phong.frag/.vert     ← Iluminação Phong
-│   ├── 📄 xray.frag/.vert      ← Efeito raio-X
-│   └── 📂 decorate_shadow\     ← Sombras e SSAO
-│
-├── 📂 platforms\               ← Integração com Windows
-│   └── 📦 qwindows.dll
-│
-├── 📂 imageformats\            ← Suporte a formatos de imagem
-│   └── (JPG, PNG, SVG, TIFF, WebP...)
-│
-├── 📂 styles\                  ← Tema visual do Windows
-└── 📂 translations\            ← Traduções Qt (pt, en, es, fr...)
+| Arquivo/Pasta | Descrição |
+|---------------|-----------|
+| 🟢 **meshlab.exe** | ▶️ **ARQUIVO PRINCIPAL** — execute este! |
+| `UseCPUOpenGL.exe` | Alternativa se houver problema gráfico |
+| `plugins/` | Filtros e ferramentas extras (carregados automaticamente) |
+| `shaders/` | Efeitos visuais (Phong, Toon, X-Ray, Sombras...) |
+| `imageformats/` | Suporte a JPG, PNG, WebP, etc. |
+| `Qt5*.dll` | Interface gráfica (Qt 5.15.2) |
+| `embree4.dll` | Motor de raytracing de alta performance |
+| `meshlab-common.dll` | Core de processamento de malhas |
+
+---
+
+## 🔗 Fluxo de Execução Simplificado
+
+```mermaid
+flowchart TD
+    A["👤 Você"] -->|"Duplo clique"| B
+
+    B["🟢 meshlab.exe\nbuild/src/distrib/"]
+
+    B -->|carrega| C["📦 meshlab-common.dll\nProcessamento de malhas"]
+    B -->|carrega| D["📦 Qt5*.dll\nInterface gráfica"]
+    B -->|carrega| E["📦 embree4.dll\nRaytracing 3D"]
+    B -->|carrega automaticamente| F["📂 plugins/\nFiltros e ferramentas"]
+    B -->|carrega automaticamente| G["📂 shaders/\nEfeitos visuais"]
+
+    C --> H["✅ MeshLab aberto\npronto para usar!"]
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+
+    style B fill:#22c55e,color:#fff,stroke:#16a34a,stroke-width:3px
+    style H fill:#3b82f6,color:#fff,stroke:#2563eb
+    style A fill:#f59e0b,color:#fff,stroke:#d97706
 ```
 
 ---
 
-## 📌 Resumo Rápido
-
-| O que fazer | Onde |
-|-------------|------|
-| ▶️ **Abrir o MeshLab** | `build\src\distrib\meshlab.exe` |
-| 🔧 **Recompilar** | Rodar `build_temp.bat` na raiz |
-| 📖 **Documentação PT** | `README_PT.md` na raiz |
-| 🔌 **Adicionar plugins** | `build\src\distrib\plugins\` |
-| 🎨 **Shaders / Efeitos** | `build\src\distrib\shaders\` |
-| 💻 **Código-fonte** | `src\meshlab\` e `src\meshlabplugins\` |
-
----
-
-## 🛠️ Como (Re)compilar do Zero
+## 🛠️ Como (re)compilar do zero
 
 Caso precise recompilar, você precisará de:
 
@@ -189,7 +124,19 @@ ninja
 
 ---
 
-## 🔗 Links Úteis
+## 📌 Resumo Rápido
+
+| O que fazer | Onde |
+|-------------|------|
+| ▶️ **Abrir o MeshLab** | `build\src\distrib\meshlab.exe` |
+| 🔧 **Recompilar** | Rodar `build_temp.bat` na raiz |
+| 📖 **Documentação PT** | `README_PT.md` na raiz |
+| 🔌 **Adicionar plugins** | `build\src\distrib\plugins\` |
+| 🎨 **Shaders / Efeitos** | `build\src\distrib\shaders\` |
+
+---
+
+## 🔗 Links úteis
 
 - Site oficial: https://www.meshlab.net
 - Repositório original: https://github.com/cnr-isti-vclab/meshlab
@@ -197,6 +144,6 @@ ninja
 
 ---
 
-## 👤 Sobre Esta Versão
+## 👤 Sobre esta versão
 
 Esta é uma **versão local personalizada** do MeshLab, compilada e mantida para uso direto no Windows sem necessidade de instalação. O executável está incluído no repositório para facilitar a distribuição e evitar o processo de compilação.
